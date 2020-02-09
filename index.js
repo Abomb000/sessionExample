@@ -2,9 +2,11 @@ const express = require('express');
 const config = require('./config');
 const cache = require('./utils/cache');
 const manager = require('./utils/session_managr');
+const redis = require('./DAL/mRedis');
 
 const app = express();
 
+if(config.enable_redis) redis.connect();
 
 cache.setPeriod(config.cacheTime);
 app.set("PORT", config.PORT);
