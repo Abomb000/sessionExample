@@ -29,7 +29,7 @@ async function connect() {
         return redisClient.connected;
 
     } catch (err) {
-        console.log('failed to connect to redis', err);
+        console.log('failed to connect to redis'+ err.message);
         return false;
     }
 }
