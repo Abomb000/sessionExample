@@ -62,22 +62,14 @@ function cb(ip) {
     }
 }
 
-
-function createSession(new_set){
-    var new_set = new_set || '';
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "/collect"+new_set, true);
-    xhr.onload = function () {
-        if(xhr.responseText==="updateSession") {
-            console.log(xhr.responseText);
-            determineIps();
-        } else
-            console.log("session created");
-    };
-    xhr.send();
-    return true;
-}
-
+var createSession=(new_set)=>request("/collect"+(new_set || ''),(xhr)=>{
+    var r = xhr.srcElement.responseText;
+    if(r==="updateSession") {
+        console.log(r);
+        determineIps();
+    } else
+        console.log("session created");
+});
 
 function start_session() {
     //determineIps();
@@ -99,26 +91,25 @@ function setCookie(cname, cvalue, extime) {
 }
 
 
-function loadSessions(){
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "/getall", true);
-    //xhr.setRequestHeader("X-My-Custom-Header", "some value");
-    xhr.onload = function () {
-        //console.log(xhr.responseText);
-        document.getElementById('total_sess').innerHTML = xhr.responseText;
-    };
-    xhr.send();
-}
-setInterval(loadSessions,1500);
+setInterval(()=>request("/getall",(xhr)=>{
+    var r = xhr.srcElement.responseText;
+    console.log(r);
+    document.getElementById('total_sess').innerHTML = r;
+}),1500);
 
 
-function loadToFromSession(){
+loadToFromSession = ()=>request("/session_endpoint?"+document.getElementById('get_params').value,(xhr)=>{
+    var r = xhr.srcElement.responseText;
+    console.log(r);
+    document.getElementById('my_sess').innerHTML = r;
+});
+
+function request(url,cb){
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "/session_endpoint?"+document.getElementById('get_params').value, true);
+    xhr.open("GET", url, true);
     //xhr.setRequestHeader("X-My-Custom-Header", "some value");
-    xhr.onload = function () {
-        console.log(xhr.responseText);
-        document.getElementById('my_sess').innerHTML = xhr.responseText;
-    };
+    xhr.onload = cb;
     xhr.send();
 }
+
+
