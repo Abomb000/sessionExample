@@ -1,0 +1,12 @@
+version: '3'
+services:
+  redis:
+    image: 'redis'
+    container_name: "redis"
+    ports:
+      - "6379"
+  node-app:
+    build: .
+    container_name: "node-app"
+    ports:
+      - "4001:8081"

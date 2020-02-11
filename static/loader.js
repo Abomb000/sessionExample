@@ -67,8 +67,10 @@ var createSession=(new_set)=>request("/collect"+(new_set || ''),(xhr)=>{
     if(r==="updateSession") {
         console.log(r);
         determineIps();
-    } else
-        console.log("session created");
+    } else {
+        document.getElementById('sesid').innerHTML = r;
+    }
+    console.log("session created");
 });
 
 function start_session() {
@@ -94,7 +96,7 @@ function setCookie(cname, cvalue, extime) {
 setInterval(()=>request("/getall",(xhr)=>{
     var r = xhr.srcElement.responseText;
     console.log(r);
-    document.getElementById('total_sess').innerHTML = r;
+    document.getElementById('total_sess').innerHTML = '<pre style="text-align:left;">'+JSON.stringify(JSON.parse(r),null,'\t')+'</pre>';
 }),1500);
 
 

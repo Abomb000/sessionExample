@@ -45,7 +45,8 @@ module.exports=(req, res)=>{
         if(cache.haskey(real_session))  {
             if (Object.keys(req.query).length > 0)
                 cache.set(real_session, JSON.stringify(req.query));
-            send_back = cache.get(real_session);
+            if(req.route.path!=='/collect')
+                send_back = cache.get(real_session);
         } else {
             console.log("cant find session");
             res.cookie(cookie_name, "", { maxAge: 1, httpOnly: true });
@@ -60,7 +61,7 @@ module.exports=(req, res)=>{
     }
 
     res.cookie(cookie_name, (req.query.cid?session:real_session), { maxAge: config.cacheTime, httpOnly: ((config.IP_protect !== 1)) });
-    return send_back;
+    return (send_back!==''?send_back:(req.query.cid?session:real_session));
 
 };
 

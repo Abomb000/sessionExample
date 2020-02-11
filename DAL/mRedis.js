@@ -52,8 +52,12 @@ async function hSet(hash, key, value) {
 
 }
 
-async function set(key, value) {
-    return redisClient.SETAsync(key, value);
+async function set(key, value, type, ttl) {
+    return redisClient.SETAsync(key, value, type, ttl);
+}
+
+async function get(key) {
+    return redisClient.GETAsync(key);
 }
 
 async function exists(key) {
@@ -84,4 +88,4 @@ function quit() {
     redisClient.quit();
 }
 
-module.exports = {connect, hGetAll, hGet, hSet, client,quit, set, sismember, exists};
+module.exports = {connect, hGetAll, hGet, hSet, client,quit, set, get, sismember, exists};
